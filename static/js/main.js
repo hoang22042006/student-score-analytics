@@ -93,7 +93,7 @@ function removeSubject(id) {
 
 // Xóa tất cả môn học
 function clearAllSubjects() {
-    if (confirm('Bạn có chắc muốn xoá toàn bộ danh sách môn không?')) {
+    if (confirm('Bạn có chắc chắn muốn xóa toàn bộ môn?')) {
         subjects = [];
         nextId = 1;
         saveToLocalStorage();

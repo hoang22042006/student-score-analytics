@@ -48,10 +48,12 @@ body {
 /* Form Section */
 .form-section {
     background: white;
-    padding: 25px;
-    border-radius: 10px;
+    padding: 30px;
+    border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 30px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .form-header {
@@ -107,6 +109,13 @@ body {
 .form-group {
     display: flex;
     flex-direction: column;
+    margin-bottom: 0;
+}
+
+.form-group:last-of-type {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
 }
 
 .form-group label {
@@ -118,9 +127,10 @@ body {
 .form-group input {
     padding: 10px;
     border: 2px solid #ddd;
-    border-radius: 5px;
+    border-radius: 8px;
     font-size: 1em;
     transition: border-color 0.3s;
+    background: #f8f9fa;
 }
 
 .form-group input:focus {
@@ -137,14 +147,15 @@ body {
 
 /* Buttons */
 .btn {
-    padding: 10px 20px;
+    padding: 12px 24px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     font-size: 1em;
     cursor: pointer;
     transition: all 0.3s;
     font-weight: 500;
     white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary {
@@ -183,8 +194,10 @@ body {
 .btn-delete {
     background: #e74c3c;
     color: white;
-    padding: 5px 15px;
+    padding: 6px 16px;
     font-size: 0.9em;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(231, 76, 60, 0.2);
 }
 
 .btn-delete:hover {
@@ -194,10 +207,12 @@ body {
 /* Table Section */
 .table-section {
     background: white;
-    padding: 25px;
-    border-radius: 10px;
+    padding: 30px;
+    border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 30px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .table-header {
@@ -228,8 +243,12 @@ body {
 
 .subjects-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     margin-top: 10px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .subjects-table thead {
@@ -238,22 +257,28 @@ body {
 }
 
 .subjects-table th {
-    padding: 12px;
+    padding: 15px 12px;
     text-align: left;
     font-weight: 600;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .subjects-table td {
     padding: 12px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #e0e0e0;
+    background: white;
 }
 
-.subjects-table tbody tr:hover {
-    background: #f8f9fa;
+.subjects-table td:last-child {
+    text-align: center;
 }
 
 .subjects-table tbody tr:last-child td {
     border-bottom: none;
+}
+
+.subjects-table tbody tr:hover {
+    background: #f0f4ff;
 }
 
 .empty-message {
@@ -271,10 +296,12 @@ body {
 /* Results Section */
 .results-section {
     background: white;
-    padding: 25px;
-    border-radius: 10px;
+    padding: 30px;
+    border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 30px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .results-section h2 {
@@ -293,11 +320,20 @@ body {
 .result-card {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    padding: 25px;
-    border-radius: 10px;
+    padding: 30px;
+    border-radius: 12px;
     text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Card đặc biệt cho GPA và điểm TB */
+.result-card:nth-child(2),
+.result-card:nth-child(3) {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+    border: 3px solid rgba(255, 255, 255, 0.3);
 }
 
 .result-card:hover {
@@ -311,9 +347,17 @@ body {
 }
 
 .result-value {
-    font-size: 2.5em;
+    font-size: 3.5em;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Tô nổi đặc biệt cho GPA và điểm TB */
+.result-card:nth-child(2) .result-value,
+.result-card:nth-child(3) .result-value {
+    font-size: 4em;
+    color: #fff;
 }
 
 .result-description {
@@ -325,7 +369,9 @@ body {
     display: flex;
     gap: 15px;
     justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
+    margin-top: 20px;
 }
 
 /* Footer */
