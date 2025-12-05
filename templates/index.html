@@ -147,6 +147,18 @@
         </div>
     </footer>
 
+    <!-- Modal xác nhận xóa tất cả -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <h3>Xác nhận</h3>
+            <p>Bạn có chắc chắn muốn xóa toàn bộ môn?</p>
+            <div class="modal-buttons">
+                <button id="confirmYes" class="btn btn-danger">Đồng ý</button>
+                <button id="confirmNo" class="btn btn-primary">Hủy</button>
+            </div>
+        </div>
+    </div>
+
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

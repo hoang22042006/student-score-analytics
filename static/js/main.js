@@ -93,13 +93,24 @@ function removeSubject(id) {
 
 // Xóa tất cả môn học
 function clearAllSubjects() {
-    if (confirm('Bạn có chắc chắn muốn xóa toàn bộ môn?')) {
-        subjects = [];
-        nextId = 1;
-        saveToLocalStorage();
-        renderTable();
-        calculateGPA();
-    }
+    const modal = document.getElementById('confirmModal');
+    modal.classList.add('show');
+}
+
+// Xác nhận xóa
+function confirmDeleteAll() {
+    subjects = [];
+    nextId = 1;
+    saveToLocalStorage();
+    renderTable();
+    calculateGPA();
+    closeModal();
+}
+
+// Đóng modal
+function closeModal() {
+    const modal = document.getElementById('confirmModal');
+    modal.classList.remove('show');
 }
 
 // Render bảng môn học
@@ -234,6 +245,17 @@ document.getElementById('calculateBtn').addEventListener('click', calculateGPA);
 
 // Xử lý nút xóa tất cả
 document.getElementById('clearAllBtn').addEventListener('click', clearAllSubjects);
+
+// Xử lý modal xác nhận
+document.getElementById('confirmYes').addEventListener('click', confirmDeleteAll);
+document.getElementById('confirmNo').addEventListener('click', closeModal);
+
+// Đóng modal khi click bên ngoài
+document.getElementById('confirmModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeModal();
+    }
+});
 
 // Khởi tạo
 document.addEventListener('DOMContentLoaded', function() {
