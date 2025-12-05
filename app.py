@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import json
+import os
 
 app = Flask(__name__)
 
@@ -92,5 +93,9 @@ def index():
     return render_template('index.html')
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Railway sẽ cung cấp PORT qua environment variable
+    port = int(os.environ.get('PORT', 5000))
+    # Tắt debug mode khi chạy trên production (Railway)
+    debug_mode = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
+    app.run(debug=debug_mode, host='0.0.0.0', port=port)
 
