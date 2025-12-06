@@ -38,3 +38,9 @@ instance/
 .DS_Store
 Thumbs.db
 
+# Database
+*.db
+*.sqlite
+*.sqlite3
+gpa_database.db
+
