@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính điểm GPA - Đồ án Python</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1 class="title">Tính điểm GPA</h1>
+            <p class="subtitle">Nhập danh sách môn học, tín chỉ và điểm để tính GPA thang 4.0</p>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Form thêm môn -->
+            <section class="form-section">
+                <div class="form-header">
+                    <h2>Thêm môn học</h2>
+                    <div class="grade-scale-selector">
+                        <label for="gradeScale">Hệ điểm nhập:</label>
+                        <select id="gradeScale" name="gradeScale">
+                            <option value="10">Thang 10</option>
+                            <option value="4">Thang 4</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <form id="subjectForm" class="subject-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="subjectName">Tên môn:</label>
+                            <input type="text" id="subjectName" name="subjectName" placeholder="Ví dụ: Toán cao cấp" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="credits">Số tín chỉ:</label>
+                            <input type="number" id="credits" name="credits" step="0.5" min="0.5" placeholder="3" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="grade">Điểm:</label>
+                            <input type="number" id="grade" name="grade" step="0.1" min="0" max="10" placeholder="8.5" required>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Thêm môn</button>
+                        </div>
+                    </div>
+                    <div id="errorMessage" class="error-message"></div>
+                </form>
+            </section>
+
+            <!-- Bảng danh sách môn -->
+            <section class="table-section">
+                <div class="table-header">
+                    <h2>Danh sách môn học</h2>
+                    <span id="subjectCount" class="subject-count">0 môn</span>
+                </div>
+                <div class="table-wrapper">
+                    <table id="subjectsTable" class="subjects-table">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tên môn</th>
+                                <th>Số tín chỉ</th>
+                                <th>Điểm đã nhập</th>
+                                <th>Hệ điểm</th>
+                                <th>Điểm (thang 4.0)</th>
+                                <th>Điểm (thang 10)</th>
+                                <th>Xóa</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subjectsTableBody">
+                            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                        </tbody>
+                    </table>
+                    <div id="emptyMessage" class="empty-message">Chưa có môn học nào. Hãy thêm môn học để bắt đầu!</div>
+                </div>
+            </section>
+
+            <!-- Kết quả GPA -->
+            <section class="results-section">
+                <h2>Kết quả</h2>
+                <div class="results-grid">
+                    <div class="result-card">
+                        <div class="result-label">Tổng số tín chỉ</div>
+                        <div class="result-value" id="totalCredits">0</div>
+                        <div class="result-description">Bao gồm tất cả các môn phía trên</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-label">GPA (thang 4.0)</div>
+                        <div class="result-value" id="gpa4">–</div>
+                        <div class="result-description">Công thức: Σ(điểm 4.0 × tín chỉ) / Σ tín chỉ</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-label">Điểm TB (thang 10)</div>
+                        <div class="result-value" id="avg10">–</div>
+                        <div class="result-description">Trung bình có trọng số theo tín chỉ</div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button id="calculateBtn" class="btn btn-success">Tính lại GPA</button>
+                    <button id="clearAllBtn" class="btn btn-danger">Xóa tất cả</button>
+                </div>
+            </section>
+
+            <!-- Dashboard với biểu đồ -->
+            <section class="dashboard-section">
+                <h2>Dashboard - Biểu đồ phân tích</h2>
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Biểu đồ cột - Điểm từng môn</h3>
+                        <canvas id="barChart"></canvas>
+                        <p class="chart-description">So sánh điểm thang 4.0 của từng môn học</p>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Biểu đồ tròn - Phân bố học lực</h3>
+                        <canvas id="pieChart"></canvas>
+                        <p class="chart-description">Tỷ lệ các môn theo học lực (A, B, C, D, F)</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <h3>Bảng quy đổi điểm thang 10 → 4</h3>
+            <div class="conversion-table">
+                <div class="conversion-row">
+                    <span class="range">8.5 – 10.0</span>
+                    <span class="arrow">→</span>
+                    <span class="value">4.0</span>
+                </div>
+                <div class="conversion-row">
+                    <span class="range">8.0 – 8.4</span>
+                    <span class="arrow">→</span>
+                    <span class="value">3.7</span>
+                </div>
+                <div class="conversion-row">
+                    <span class="range">7.0 – 7.9</span>
+                    <span class="arrow">→</span>
+                    <span class="value">3.0</span>
+                </div>
+                <div class="conversion-row">
+                    <span class="range">6.0 – 6.9</span>
+                    <span class="arrow">→</span>
+                    <span class="value">2.0</span>
+                </div>
+                <div class="conversion-row">
+                    <span class="range">5.0 – 5.9</span>
+                    <span class="arrow">→</span>
+                    <span class="value">1.0</span>
+                </div>
+                <div class="conversion-row">
+                    <span class="range">&lt; 5.0</span>
+                    <span class="arrow">→</span>
+                    <span class="value">0.0</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal xác nhận xóa tất cả -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <h3>Xác nhận</h3>
+            <p>Bạn có chắc chắn muốn xóa toàn bộ môn?</p>
+            <div class="modal-buttons">
+                <button id="confirmYes" class="btn btn-danger">Đồng ý</button>
+                <button id="confirmNo" class="btn btn-primary">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
+
