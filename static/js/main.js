@@ -470,6 +470,57 @@ async function drawCharts() {
     } catch (error) {
         console.error('Error drawing charts:', error);
     }
+    
+    // Vẽ biểu đồ Matplotlib
+    drawMatplotlibCharts();
+}
+
+// Vẽ biểu đồ Matplotlib
+async function drawMatplotlibCharts() {
+    if (subjects.length === 0) {
+        // Ẩn biểu đồ nếu không có dữ liệu
+        const barImg = document.getElementById('matplotlibBarChart');
+        const pieImg = document.getElementById('matplotlibPieChart');
+        if (barImg) {
+            barImg.style.display = 'none';
+        }
+        if (pieImg) {
+            pieImg.style.display = 'none';
+        }
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/charts/matplotlib', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ subjects: subjects })
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            
+            // Hiển thị biểu đồ cột Matplotlib
+            const barImg = document.getElementById('matplotlibBarChart');
+            if (barImg && data.barChart) {
+                barImg.src = 'data:image/png;base64,' + data.barChart;
+                barImg.style.display = 'block';
+            }
+            
+            // Hiển thị biểu đồ tròn Matplotlib
+            const pieImg = document.getElementById('matplotlibPieChart');
+            if (pieImg && data.pieChart) {
+                pieImg.src = 'data:image/png;base64,' + data.pieChart;
+                pieImg.style.display = 'block';
+            }
+        } else {
+            console.error('Error loading Matplotlib charts:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error drawing Matplotlib charts:', error);
+    }
 }
 
 // Khởi tạo
