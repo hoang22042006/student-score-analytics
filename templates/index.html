@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tính điểm GPA - Đồ án Python</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
     <!-- Header -->
@@ -104,23 +103,6 @@
                 <div class="action-buttons">
                     <button id="calculateBtn" class="btn btn-success">Tính lại GPA</button>
                     <button id="clearAllBtn" class="btn btn-danger">Xóa tất cả</button>
-                </div>
-            </section>
-
-            <!-- Dashboard với biểu đồ -->
-            <section class="dashboard-section">
-                <h2>Dashboard - Biểu đồ phân tích</h2>
-                <div class="charts-grid">
-                    <div class="chart-container">
-                        <h3>Biểu đồ cột - Điểm từng môn</h3>
-                        <canvas id="barChart"></canvas>
-                        <p class="chart-description">So sánh điểm thang 4.0 của từng môn học</p>
-                    </div>
-                    <div class="chart-container">
-                        <h3>Biểu đồ tròn - Phân bố học lực</h3>
-                        <canvas id="pieChart"></canvas>
-                        <p class="chart-description">Tỷ lệ các môn theo học lực (A, B, C, D, F)</p>
-                    </div>
                 </div>
             </section>
 

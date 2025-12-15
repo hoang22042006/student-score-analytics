@@ -44,7 +44,7 @@ async function loadFromDatabase() {
             
             renderTable();
             calculateGPA();
-            drawCharts();
+            drawMatplotlibCharts();
         } else {
             console.error('Error loading from database:', response.statusText);
             // Fallback to localStorage nếu không load được từ database
@@ -67,6 +67,7 @@ function loadFromLocalStorage() {
         }
         renderTable();
         calculateGPA();
+        drawMatplotlibCharts();
     }
 }
 
@@ -180,7 +181,7 @@ async function confirmDeleteAll() {
             saveToLocalStorage(); // Xóa localStorage backup
             renderTable();
             calculateGPA();
-            drawCharts();
+            drawMatplotlibCharts();
             closeModal();
         } else {
             const errorData = await response.json();
@@ -342,138 +343,6 @@ document.getElementById('confirmModal').addEventListener('click', function(e) {
         closeModal();
     }
 });
-
-// Biến lưu Chart instances
-let barChart = null;
-let pieChart = null;
-
-// Vẽ biểu đồ
-async function drawCharts() {
-    if (subjects.length === 0) {
-        // Xóa biểu đồ nếu không có dữ liệu
-        if (barChart) {
-            barChart.destroy();
-            barChart = null;
-        }
-        if (pieChart) {
-            pieChart.destroy();
-            pieChart = null;
-        }
-        return;
-    }
-    
-    try {
-        const response = await fetch('/api/charts', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ subjects: subjects })
-        });
-        
-        const data = await response.json();
-        
-        // Vẽ Bar Chart
-        const barCtx = document.getElementById('barChart').getContext('2d');
-        if (barChart) {
-            barChart.destroy();
-        }
-        barChart = new Chart(barCtx, {
-            type: 'bar',
-            data: {
-                labels: data.barChart.labels,
-                datasets: [{
-                    label: 'Điểm thang 4.0',
-                    data: data.barChart.data,
-                    backgroundColor: 'rgba(102, 126, 234, 0.7)',
-                    borderColor: 'rgba(102, 126, 234, 1)',
-                    borderWidth: 2,
-                    borderRadius: 5
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top'
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return 'Điểm: ' + context.parsed.y.toFixed(2);
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 4.0,
-                        ticks: {
-                            stepSize: 0.5
-                        },
-                        title: {
-                            display: true,
-                            text: 'Điểm thang 4.0'
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Môn học'
-                        }
-                    }
-                }
-            }
-        });
-        
-        // Vẽ Pie Chart
-        const pieCtx = document.getElementById('pieChart').getContext('2d');
-        if (pieChart) {
-            pieChart.destroy();
-        }
-        pieChart = new Chart(pieCtx, {
-            type: 'pie',
-            data: {
-                labels: data.pieChart.labels,
-                datasets: [{
-                    data: data.pieChart.data,
-                    backgroundColor: data.pieChart.colors,
-                    borderColor: '#fff',
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'right'
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const label = context.label || '';
-                                const value = context.parsed || 0;
-                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                const percentage = ((value / total) * 100).toFixed(1);
-                                return label + ': ' + value + ' môn (' + percentage + '%)';
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    } catch (error) {
-        console.error('Error drawing charts:', error);
-    }
-    
-    // Vẽ biểu đồ Matplotlib
-    drawMatplotlibCharts();
-}
 
 // Vẽ biểu đồ Matplotlib
 async function drawMatplotlibCharts() {
